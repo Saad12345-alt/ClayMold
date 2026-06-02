@@ -1,157 +1,165 @@
-@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Libertinus+Sans:ital,wght@0,400;0,700;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
-html {
-  scroll-behavior: smooth;
-}
+html { scroll-behavior: smooth; }
 
 body {
   margin: 0;
   padding: 0;
-  min-height: 100%; /* fill viewport */
-  min-width: 100%;
-  display: flex;
-  flex-direction: column;
-  font-family: Verdana, Geneva, Tahoma, sans-serif;
-  background-color: #f4f4f4; /* page background */
-  color: #333;
+  font-family: 'Inter', sans-serif;
+  background: #f0f2f5;
+  color: #1a2b4b;
 }
 
-.body
-{
-  margin-top:10%;
+/* ── Page wrapper ── */
+.body {
+  padding: 80px 2.5rem 3rem;   /* 80 = navbar height + breathing room */
+  max-width: 1140px;
+  margin: 0 auto;
 }
 
+@media (max-width: 768px) { .body { padding: 76px 1.25rem 2rem; } }
+@media (max-width: 430px) { .body { padding: 72px 1rem 2rem; } }
 
-@media (max-width: 768px) {
-  .body {
-    margin-top: 10%;
-  }
-}
-@media (max-width: 430px) {
-  .body {
-    margin-top: 20%;
-  }
-}
-
-.idbox
-{
-    display: flex;
-    justify-items: center;
-    flex-direction: column;
-    align-items: start;
-    height: auto;
-    width: 100%;
-}
+/* ══════════════════════════════════
+   HERO / ABOUT CARD
+══════════════════════════════════ */
+.idbox { width: 100%; margin-bottom: 2.5rem; }
 
 .AboutContainer {
-  height: auto;
-  width: auto;
-  margin: 0 auto 2rem auto;
-  padding: 1rem 2rem;
-  background-color: #F7F7FF;
-  box-shadow: inset 0px 5px 5px rgba(0, 0, 0, 0.3);
-  border-radius: 10px;
+  background: #ffffff;
+  border-radius: 18px;
+  padding: 2rem 2.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 2rem;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.06);
 }
 
+.about-text { flex: 1; }
+
 .About {
-  color: rgb(61, 59, 107);
-  margin: 1.5rem 0 0.5rem 0;
-  text-align: center;
-  font-size: clamp(1rem, 2vw, 2rem);
-  font-family: "Libertinus Sans", sans-serif;
+  font-family: 'Inter', sans-serif;
+  font-size: 1.6rem;
   font-weight: 700;
-  font-style: normal;
+  color: #1a2b4b;
+  margin: 0 0 0.65rem;
+  text-align: left;
 }
 
 .AboutP {
-  font-size: clamp(1rem, 2vw, 2rem);
-  color: #222;
-  line-height: 1.6;
-  text-align: center;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.875rem;
+  color: #4a5568;
+  line-height: 1.75;
+  margin: 0;
+  max-width: 480px;
 }
 
-.ProductText {
-  color: black;
-  margin: 1.5rem 0 0.75rem 0;
-  text-align: center;
-  margin-bottom: 5%;
-  font-size: clamp(1rem, 2vw, 2rem);
-  font-family: "Libertinus Sans", sans-serif;
-  font-weight: 700;
-  font-style: normal;
+.about-icon {
+  width: 110px;
+  height: 110px;
+  border-radius: 50%;
+  background: #e8eaed;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.8rem;
+  flex-shrink: 0;
+  color: #9aa5b4;
 }
 
+@media (max-width: 600px) {
+  .AboutContainer { flex-direction: column; align-items: flex-start; }
+  .about-icon { display: none; }
+}
+
+/* ══════════════════════════════════
+   FILTER BAR
+══════════════════════════════════ */
 .FilterBar {
   display: flex;
-  justify-content: space-around;
   align-items: center;
-  gap: 1rem;
+  justify-content: space-around;
+  gap: 0.75rem;
   width: 100%;
-  max-width: 900px;
-  margin: 0 auto 2rem auto;
-  flex-wrap: wrap; /* makes it stack on small screens */
+  margin-bottom: 1.75rem;
+  flex-wrap: wrap;
 }
 
-.FilterBar div input {
-  flex: 1; /* take available space */
-  min-width: 200px; /* don't shrink too much */
-  max-width: 500px; /* optional, prevent too wide */
-  height: 2.5rem;
-  padding: 0.3rem 0.6rem;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-  font-size: 1rem;
-  transition: border-color 0.3s ease;
-  box-sizing: border-box;
-  margin-left: 10px;
+/* Search pill */
+.search-wrap {
+  position: relative;
+  flex: 1;
+  min-width: 200px;
+  max-width: 380px;
 }
 
-.FilterBar div input:focus {
-  border-color: rgb(161, 169, 74);
+.search-icon {
+  position: absolute;
+  left: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #9aa5b4;
+  font-size: 0.85rem;
+  pointer-events: none;
+}
+
+.search-input {
+  width: 100%;
+  height: 42px;
+  padding: 0 1rem 0 2.6rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 22px;
+  font-size: 0.875rem;
+  font-family: 'Inter', sans-serif;
+  background: #ffffff;
+  color: #1a2b4b;
   outline: none;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+.search-input::placeholder { color: #9aa5b4; }
+.search-input:focus {
+  border-color: #4a7ab5;
+  box-shadow: 0 0 0 3px rgba(74,122,181,0.12);
 }
 
-
-
-.FilterBar select {
-  padding: 8px 12px;
-  border-radius: 6px;
-  border: 1px solid #ccc;
-  background-color: white;
-  font-size: 14px;
+/* Filter pill select */
+.filter-pill {
+  
+  height: 42px;
+  padding: 0 1.1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 22px;
+  background: #ffffff;
+  font-size: 0.875rem;
+  font-family: 'Inter', sans-serif;
+  color: #1a2b4b;
   cursor: pointer;
-  margin-left: 10px;
-  flex: 1.5;
-}
-
-.FilterBar select:focus {
-  border-color: #6c63ff; /* highlight color */
   outline: none;
+  appearance: none;
+  -webkit-appearance: none;
+  min-width: 140px;
+  transition: border-color 0.2s;
+}
+.filter-pill:focus {
+  border-color: #4a7ab5;
+  box-shadow: 0 0 0 3px rgba(74,122,181,0.12);
 }
 
+/* ══════════════════════════════════
+   PRODUCT GRID
+══════════════════════════════════ */
 .productlist {
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 3 per row on PC */
-  gap: 1.5rem;
-  padding: 2rem;
-  box-sizing: border-box;
-  min-width: 100%;
-  margin: 0 auto; /* center */
-  background-color: #484949;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1.25rem;
+  width: 100%;
+  background: transparent;
+  padding: 0;
+  margin: 0;
 }
 
-/* Tablet */
-@media (max-width: 768px) {
-  .productlist {
-    grid-template-columns: repeat(2, 1fr);
-    padding: 1.5rem;
-  }
-}
-
-/* Mobile */
-@media (max-width: 480px) {
-  .productlist {
-    grid-template-columns: 1fr;
-    padding: 1rem;
-  }
-}
+@media (max-width: 1000px) { .productlist { grid-template-columns: repeat(3, 1fr); } }
+@media (max-width: 700px)  { .productlist { grid-template-columns: repeat(2, 1fr); } }
+@media (max-width: 420px)  { .productlist { grid-template-columns: 1fr; } }

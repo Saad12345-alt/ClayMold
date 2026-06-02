@@ -1,86 +1,95 @@
-@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Libertinus+Sans:ital,wght@0,400;0,700;1,400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
 
+/* ── Card ── */
 .card {
-  /* No fixed width here, the grid handles the width */
-  width: auto; 
-  height: auto;
-  box-sizing: border-box;
-  background-color: #D9D9D9;
-  border-radius: 12px;
-  padding: 1rem;
+  background: #ffffff;
+  border-radius: 14px;
+  overflow: hidden;
   display: flex;
   flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  gap: 0.8rem;
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-/* Card hover effect */
 .card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.11);
 }
 
-/* Card image container */
+/* ── Image ── */
 .card-image {
   width: 100%;
-  aspect-ratio: 4 / 3; /* maintain aspect ratio */
+  aspect-ratio: 4 / 3;
   overflow: hidden;
-  border-radius: 8px;
-  background-color: #ccc; /* placeholder */
+  background: #e8eaed;
   position: relative;
 }
 
-/* Card image */
 .card-image img {
   width: 100%;
   height: 100%;
-  object-fit: cover; /* cover container */
+  object-fit: cover;
   object-position: center;
   display: block;
-  border-radius: 8px;
   position: absolute;
   top: 0;
   left: 0;
+  transition: transform 0.35s ease;
 }
 
-/* Name and stock container */
-.name-stock {
-  display: flex;
-  justify-content: center;
-  gap: 1.5rem;
+.card:hover .card-image img { transform: scale(1.04); }
+
+/* ── Stock badge overlaid on image ── */
+.stock-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.7rem;
   font-weight: 600;
-  color: #444;
-  flex-wrap: wrap; /* wrap on smaller widths */
+  padding: 3px 10px;
+  border-radius: 20px;
+  z-index: 1;
+  letter-spacing: 0.01em;
 }
 
-/* Product name */
+.stock-badge.in-stock  { background: #d1fae5; color: #065f46; }
+.stock-badge.sold-out  { background: #fee2e2; color: #991b1b; }
+
+/* ── Card body ── */
+.card-body {
+  padding: 0.875rem 1rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
 .name {
-  color: #121210;
-  font-size: clamp(1rem, 2vw, 1.5rem); /* responsive font */
-  font-family: "Libertinus Sans", sans-serif;
-  font-weight: 700;
-  font-style: normal;
-  text-align: center;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #1a2b4b;
+  margin: 0;
+  line-height: 1.35;
 }
 
-/* Product price */
+.card-desc {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.775rem;
+  color: #6b7280;
+  line-height: 1.5;
+  margin: 0;
+}
+
 .price {
-  color: #0f7036;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.925rem;
   font-weight: 700;
-  font-size: clamp(1rem, 2vw, 1.5rem); /* responsive font */
-  text-align: center;
-  margin-top: 0.5rem;
-  font-family: "Libertinus Sans", sans-serif;
-  font-style: normal;
+  color: #4a7ab5;
+  margin: 0.35rem 0 0;
 }
 
-/* Product stock */
-.stock {
-  color: #1a2350;
-  font-size: clamp(1rem, 2vw, 1.5rem); /* responsive font */
-  text-align: center;
-  font-family: "Libertinus Sans", sans-serif;
-  font-weight: 700;
-  font-style: normal;
-}
+/* Legacy selectors — hidden, replaced by new markup */
+.name-stock { display: none; }
+.stock      { display: none; }
