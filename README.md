@@ -1,8 +1,71 @@
-# Getting Started with Create React App
+# 🛍️ Shop Application with Admin Dashboard
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A full-stack e-commerce application with a professional Admin Dashboard for product management.
 
-## Available Scripts
+## 🚀 Quick Start (5 Minutes)
+
+### Prerequisites
+- Node.js installed
+- MongoDB running locally
+
+### Setup
+
+1. **Create Admin User**
+   ```bash
+   cd backend
+   node seedAdmin.js
+   ```
+   Credentials: `admin / password`
+
+2. **Start Backend** (Terminal 1)
+   ```bash
+   cd backend
+   node server.js
+   ```
+
+3. **Start Frontend** (Terminal 2)
+   ```bash
+   npm start
+   ```
+
+4. **Admin Dashboard**
+   - URL: http://localhost:3000/admin/login
+   - Login with credentials above
+
+## 📚 Documentation
+
+- **[QUICK_START.md](QUICK_START.md)** - Get up running in 5 minutes
+- **[ADMIN_DASHBOARD.md](ADMIN_DASHBOARD.md)** - Complete documentation
+- **[BACKEND_SETUP.md](BACKEND_SETUP.md)** - Backend API & setup
+- **[STEP_BY_STEP_GUIDE.md](STEP_BY_STEP_GUIDE.md)** - Detailed walkthrough
+- **[IMPLEMENTATION_SUMMARY.md](IMPLEMENTATION_SUMMARY.md)** - What's included
+
+## ✨ Features
+
+### For Customers
+- 📦 Browse products
+- 🔍 Search & filter
+- 💳 Shopping cart
+- 📱 Responsive design
+
+### For Admins
+- 🔐 Secure login
+- ➕ Add products
+- ✏️ Edit products  
+- 🗑️ Delete products
+- 📊 Real-time database sync
+
+## 📁 Project Structure
+
+```
+backend/          (Express API)
+src/
+  ├── Pages/      (AdminLogin, AdminDashboard - NEW)
+  ├── components/ (ProductForm, ProductTable - NEW)
+  └── context/    (AdminAuthContext - NEW)
+```
+
+## 🔌 Available Scripts
 
 In the project directory, you can run:
 

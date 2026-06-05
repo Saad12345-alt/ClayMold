@@ -6,9 +6,11 @@ const productSchema = new mongoose.Schema({
     image: String,
     stock: Number,
     totalnumberofitems: Number,
-    price: Number
+    price: Number,
+    createdAt: { type: Date, default: Date.now },
+    updatedAt: { type: Date, default: Date.now }
 })
 
-const Product = mongoose.model("Product", productSchema, "productSchema");
+const Product = mongoose.model("Product", productSchema);
 
 module.exports = Product;

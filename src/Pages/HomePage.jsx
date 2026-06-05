@@ -35,7 +35,7 @@ const HomePage = () => {
       {/* ── Filter bar ── */}
       <div className='FilterBar'>
         <div className='search-wrap'>
-          <span className='search-icon'>🔍</span>
+          
           <input
             className='search-input'
             type='text'
