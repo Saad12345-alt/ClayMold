@@ -20,11 +20,6 @@ const ProductList = ({ searchterm, sortorder }) => {
 
   return (
     <>
-      {products.length === 0 && (
-        <p style={{ fontFamily: 'Inter,sans-serif', color: '#6b7280', padding: '2rem', gridColumn: '1/-1' }}>
-          No products found.
-        </p>
-      )}
       {products.map(product => (
         <div
           key={product.id}

@@ -18,6 +18,9 @@ const adminSchema = new mongoose.Schema({
     createdAt: { type: Date, default: Date.now }
 })
 
-const Admin = mongoose.model("Admin", adminSchema);
+const adminDatabase = mongoose.connection.useDb(
+    process.env.MONGODB_ADMIN_DATABASE || 'adminDB'
+);
+const Admin = adminDatabase.model("Admin", adminSchema);
 
 module.exports = Admin;

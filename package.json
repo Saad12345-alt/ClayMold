@@ -9,8 +9,11 @@
     "@testing-library/react": "^16.3.0",
     "@testing-library/user-event": "^13.5.0",
     "axios": "^1.11.0",
+    "bcryptjs": "^3.0.3",
     "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
     "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.3",
     "mongoose": "^8.17.1",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
@@ -22,6 +25,8 @@
   },
   "scripts": {
     "start": "react-scripts start",
+    "server": "node backend/server.js",
+    "seed:admin": "node backend/seedAdmin.js",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"

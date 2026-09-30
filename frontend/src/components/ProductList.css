@@ -1,0 +1,95 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+/* ── Card ── */
+.card {
+  background: #ffffff;
+  border-radius: 14px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.07);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.11);
+}
+
+/* ── Image ── */
+.card-image {
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: #e8eaed;
+  position: relative;
+}
+
+.card-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transition: transform 0.35s ease;
+}
+
+.card:hover .card-image img { transform: scale(1.04); }
+
+/* ── Stock badge overlaid on image ── */
+.stock-badge {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  font-family: 'Inter', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 20px;
+  z-index: 1;
+  letter-spacing: 0.01em;
+}
+
+.stock-badge.in-stock  { background: #d1fae5; color: #065f46; }
+.stock-badge.sold-out  { background: #fee2e2; color: #991b1b; }
+
+/* ── Card body ── */
+.card-body {
+  padding: 0.875rem 1rem 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.name {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: #1a2b4b;
+  margin: 0;
+  line-height: 1.35;
+}
+
+.card-desc {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.775rem;
+  color: #6b7280;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.price {
+  font-family: 'Inter', sans-serif;
+  font-size: 0.925rem;
+  font-weight: 700;
+  color: #4a7ab5;
+  margin: 0.35rem 0 0;
+}
+
+/* Legacy selectors — hidden, replaced by new markup */
+.name-stock { display: none; }
+.stock      { display: none; }

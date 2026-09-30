@@ -1,39 +1,35 @@
-// This script helps create an admin user in the database
-// Run with: node seedAdmin.js
-
 const mongoose = require('mongoose');
 const Admin = require('./admin');
-
-mongoose.connect("mongodb://localhost:27017/Product");
+const { connectDatabase } = require('./database');
+const { hashPassword } = require('./auth');
 
 const seedAdmin = async () => {
+  const databaseTarget = await connectDatabase();
+
   try {
-    // Check if admin already exists
     const existingAdmin = await Admin.findOne({ username: 'admin' });
     if (existingAdmin) {
-      console.log('Admin user already exists!');
-      console.log('Username: admin');
-      console.log('Password: password');
+      console.log(`Admin user already exists in ${databaseTarget}. No changes made.`);
       return;
     }
 
-    // Create default admin user
-    const newAdmin = new Admin({
+    const admin = new Admin({
       username: 'admin',
-      password: 'password', // Change this in production!
+      password: await hashPassword('password'),
       email: 'admin@shop.com'
     });
 
-    await newAdmin.save();
-    console.log('✓ Admin user created successfully!');
-    console.log('Username: admin');
-    console.log('Password: password');
-    console.log('\n⚠️  IMPORTANT: Change the password in production!');
-  } catch (err) {
-    console.error('Error creating admin:', err.message);
+    await admin.save();
+    console.log(
+      `Admin user created in ${databaseTarget}. Username: admin; password: password`
+    );
+    console.log('Change the default password before deploying to production.');
   } finally {
-    mongoose.connection.close();
+    await mongoose.disconnect();
   }
 };
 
-seedAdmin();
+seedAdmin().catch((error) => {
+  console.error('Error creating admin:', error.message);
+  process.exitCode = 1;
+});

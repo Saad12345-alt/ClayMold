@@ -3,13 +3,25 @@ const cors = require('cors')
 const mongoose = require('mongoose')
 const Product = require('./product')
 const Admin = require('./admin')
+const { connectDatabase } = require('./database')
+const {
+  createAdminToken,
+  hashPassword,
+  matchesInitKey,
+  requireAdmin,
+  verifyPassword
+} = require('./auth')
 
 const app = express()
 
 app.use(cors());
 app.use(express.json())
 
-mongoose.connect("mongodb://localhost:27017/Product");
+let databaseTarget;
+
+app.get('/health', (req, res) => {
+  res.json({ status: 'ok', database: databaseTarget });
+});
 
 // ==================== PUBLIC ROUTES ====================
 
@@ -70,12 +82,24 @@ app.post('/admin/login', async (req, res) => {
 
     const admin = await Admin.findOne({ username });
 
-    if (!admin || admin.password !== password) {
+    if (!admin) {
       return res.status(401).json({ message: 'Invalid credentials' });
     }
 
-    res.json({ 
+    const passwordCheck = await verifyPassword(password, admin.password);
+    if (!passwordCheck.valid) {
+      return res.status(401).json({ message: 'Invalid credentials' });
+    }
+
+    if (passwordCheck.needsRehash) {
+      admin.password = await hashPassword(password);
+      await admin.save();
+    }
+
+    res.json({
       message: 'Login successful',
+      token: createAdminToken(admin),
+      expiresIn: 3600,
       admin: { id: admin._id, username: admin.username, email: admin.email }
     });
   } catch (err) {
@@ -86,6 +110,14 @@ app.post('/admin/login', async (req, res) => {
 // Admin Register (protected - only first time or with special key)
 app.post('/admin/register', async (req, res) => {
   try {
+    if (!matchesInitKey(req.get('x-admin-init-key'))) {
+      return res.status(401).json({ message: 'A valid initial admin key is required' });
+    }
+
+    if (await Admin.exists({})) {
+      return res.status(403).json({ message: 'Admin registration is closed' });
+    }
+
     const { username, password, email } = req.body;
 
     if (!username || !password || !email) {
@@ -97,7 +129,7 @@ app.post('/admin/register', async (req, res) => {
       return res.status(400).json({ message: 'Admin already exists' });
     }
 
-    const newAdmin = new Admin({ username, password, email });
+    const newAdmin = new Admin({ username, password: await hashPassword(password), email });
     await newAdmin.save();
 
     res.status(201).json({ 
@@ -112,7 +144,7 @@ app.post('/admin/register', async (req, res) => {
 // ==================== PRODUCT MANAGEMENT (ADMIN) ====================
 
 // Create a new product
-app.post('/admin/products', async (req, res) => {
+app.post('/admin/products', requireAdmin, async (req, res) => {
   try {
     const { id, name, image, stock, totalnumberofitems, price } = req.body;
 
@@ -139,7 +171,7 @@ app.post('/admin/products', async (req, res) => {
 });
 
 // Update a product
-app.put('/admin/products/:id', async (req, res) => {
+app.put('/admin/products/:id', requireAdmin, async (req, res) => {
   try {
     const { name, image, stock, totalnumberofitems, price } = req.body;
 
@@ -163,7 +195,7 @@ app.put('/admin/products/:id', async (req, res) => {
 });
 
 // Delete a product
-app.delete('/admin/products/:id', async (req, res) => {
+app.delete('/admin/products/:id', requireAdmin, async (req, res) => {
   try {
     const product = await Product.findByIdAndDelete(req.params.id);
 
@@ -177,4 +209,24 @@ app.delete('/admin/products/:id', async (req, res) => {
   }
 });
 
-app.listen(5000, () => console.log("Server running on port 5000"))
+const PORT = Number(process.env.PORT || 5000);
+
+const startServer = async () => {
+  if (!Number.isInteger(PORT) || PORT < 1 || PORT > 65535) {
+    throw new Error('PORT must be an integer between 1 and 65535');
+  }
+
+  databaseTarget = await connectDatabase();
+
+  await new Promise((resolve, reject) => {
+    const server = app.listen(PORT, () => resolve());
+    server.once('error', reject);
+  });
+  console.log(`Server running on port ${PORT}`);
+};
+
+startServer().catch(async (error) => {
+  console.error('Failed to start backend:', error.message);
+  await mongoose.disconnect();
+  process.exitCode = 1;
+});
