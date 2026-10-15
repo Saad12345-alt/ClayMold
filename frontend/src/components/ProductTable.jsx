@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import './ProductTable.css';
 
-const ProductTable = ({ products, onEdit, onDelete }) => {
+const ProductTable = ({ products, onEdit, onDelete, stats }) => {
   const [searchTerm, setSearchTerm] = useState('');
   const [sortField, setSortField] = useState('name');
   const [sortOrder, setSortOrder] = useState('asc');
@@ -27,8 +27,9 @@ const ProductTable = ({ products, onEdit, onDelete }) => {
     return sortOrder === 'asc' ? ' ↑' : ' ↓';
   };
 
-  const totalItems = products.reduce((s, p) => s + (p.totalnumberofitems || 0), 0);
-  const totalValue = products.reduce((s, p) => s + (p.price * (p.stock || 0)), 0);
+  // Real numbers from placed orders (cancelled orders are not counted)
+  const totalItems = stats ? stats.itemsSold : 0;
+  const totalValue = stats ? stats.revenue : 0;
 
   return (
     <div className="product-table-container">

@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { useAdminAuth } from '../context/AdminAuthContext';
 import ProductForm from '../components/ProductForm';
 import ProductTable from '../components/ProductTable';
+import OrdersTable from '../components/OrdersTable';
 import './AdminDashboard.css';
 
 const AdminDashboard = () => {
@@ -14,6 +15,9 @@ const AdminDashboard = () => {
   const [activeTab, setActiveTab] = useState('list');
   const [editingProduct, setEditingProduct] = useState(null);
   const [refreshTrigger, setRefreshTrigger] = useState(0);
+  const [orders, setOrders] = useState([]);
+  const [orderSummary, setOrderSummary] = useState({ orders: 0, revenue: 0, itemsSold: 0, pending: 0 });
+  const [ordersLoading, setOrdersLoading] = useState(true);
 
   useEffect(() => {
     if (!isAuthenticated) navigate('/admin/login');
@@ -36,6 +40,46 @@ const AdminDashboard = () => {
     };
     fetchProducts();
   }, [refreshTrigger]);
+
+  // Orders are admin-only, so this request carries the login token
+  useEffect(() => {
+    if (!isAuthenticated) return;
+    const fetchOrders = async () => {
+      try {
+        setOrdersLoading(true);
+        const response = await authenticatedFetch('http://localhost:5000/admin/orders');
+        if (!response.ok) throw new Error('Failed to fetch orders');
+        const data = await response.json();
+        setOrders(data.orders);
+        setOrderSummary(data.summary);
+      } catch (err) {
+        if (isAuthenticated) setError(err.message);
+      } finally {
+        setOrdersLoading(false);
+      }
+    };
+    fetchOrders();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [refreshTrigger, isAuthenticated]);
+
+  const handleOrderStatusChange = async (orderId, status) => {
+    try {
+      const response = await authenticatedFetch(
+        `http://localhost:5000/admin/orders/${orderId}/status`,
+        {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ status })
+        }
+      );
+      const data = await response.json();
+      if (!response.ok) throw new Error(data.message || 'Failed to update order');
+      // Refetch products too: cancelling puts stock back
+      setRefreshTrigger(p => p + 1);
+    } catch (err) {
+      setError(err.message);
+    }
+  };
 
   const handleLogout = () => { logout(); navigate('/admin/login'); };
   const handleProductAdded = () => { setRefreshTrigger(p => p + 1); setActiveTab('list'); };
@@ -100,10 +144,21 @@ const AdminDashboard = () => {
               </svg>
               Add Product
             </button>
+            <button
+              className={`nav-item ${activeTab === 'orders' ? 'active' : ''}`}
+              onClick={() => { setActiveTab('orders'); setEditingProduct(null); }}
+            >
+              <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/>
+              </svg>
+              Orders
+              {orderSummary.pending > 0 && <span className="nav-badge">{orderSummary.pending}</span>}
+            </button>
           </nav>
 
           <div className="sidebar-info">
             <p><strong>Total Products:</strong> {products.length}</p>
+            <p><strong>Orders:</strong> {orderSummary.orders}</p>
             <p>Status: <span className="status-badge">Active</span></p>
           </div>
         </aside>
@@ -132,6 +187,25 @@ const AdminDashboard = () => {
                   products={products}
                   onEdit={handleEditProduct}
                   onDelete={handleDeleteProduct}
+                  stats={orderSummary}
+                />
+              )}
+            </div>
+          )}
+
+          {activeTab === 'orders' && (
+            <div className="content-section">
+              <div className="content-header">
+                <h2>Orders Placed</h2>
+                <p>Track every order and move it from pending to delivered.</p>
+              </div>
+              {ordersLoading ? (
+                <div className="loading">Loading orders...</div>
+              ) : (
+                <OrdersTable
+                  orders={orders}
+                  summary={orderSummary}
+                  onStatusChange={handleOrderStatusChange}
                 />
               )}
             </div>

@@ -19,34 +19,17 @@
     "react-dom": "^19.1.1",
     "react-router-dom": "^7.8.0",
     "react-router-hash-link": "^2.4.3",
-    "react-scripts": "5.0.1",
     "react-toastify": "^11.0.5",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "npm --prefix frontend start",
     "server": "node backend/server.js",
     "seed:admin": "node backend/seedAdmin.js",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "build": "npm --prefix frontend run build"
   },
-  "eslintConfig": {
-    "extends": [
-      "react-app",
-      "react-app/jest"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+  "devDependencies": {
+    "@vitejs/plugin-react": "^6.1.2",
+    "vite": "^8.3.4"
   }
 }

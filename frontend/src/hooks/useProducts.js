@@ -1,28 +1,41 @@
-import { useEffect, useState } from "react";
-import axios from "axios";
+import { useState, useEffect } from 'react'
+import axios from 'axios'
 
-export const useProducts = (searchterm, sortorder) => {
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
+const API = 'http://localhost:5000'
+
+// useProducts(searchterm, sortorder, category)
+// sortorder: 'high-low' | 'low-high' | 'all'
+// category:  'All' | 'Keyboards' | 'Mice' | 'Audio' | 'Displays' | 'Accessories'
+export const useProducts = (searchterm = '', sortorder = 'high-low', category = 'All') => {
+  const [products, setProducts] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
 
   useEffect(() => {
-    const fetchData = async () => {
-      setLoading(true);
-      try {
-        const res = await axios.get("http://localhost:5000/products", {
-          params: { search: searchterm, sort: sortorder },
-        });
-        setProducts(res.data);
-      } catch (err) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
+    let cancelled = false
+    setLoading(true)
 
-    fetchData();
-  }, [searchterm, sortorder]);
+    axios
+      .get(`${API}/products`, {
+        params: { search: searchterm, sort: sortorder, category }
+      })
+      .then((res) => {
+        if (cancelled) return
+        setProducts(res.data)
+        setError(null)
+      })
+      .catch((err) => {
+        if (!cancelled) setError(err.message)
+      })
+      .finally(() => {
+        if (!cancelled) setLoading(false)
+      })
 
-  return { products, loading, error };
-};
+    // Ignore the answer if the user typed again before it arrived
+    return () => {
+      cancelled = true
+    }
+  }, [searchterm, sortorder, category])
+
+  return { products, loading, error }
+}

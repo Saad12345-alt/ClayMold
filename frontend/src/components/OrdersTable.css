@@ -1,0 +1,175 @@
+/* Small red badge on the sidebar "Orders" button (pending count) */
+.nav-badge {
+  margin-left: auto;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 6px;
+  border-radius: 999px;
+  background: #e8694f;
+  color: #fff;
+  font-size: 11.5px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.orders-container {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+/* ── Summary cards ── */
+.orders-stats {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 14px;
+}
+
+.orders-stat {
+  background: #ffffff;
+  border-radius: 16px;
+  padding: 16px 18px;
+  box-shadow: 0 2px 12px rgba(100, 140, 200, 0.08);
+}
+
+.orders-stat-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: #8a9bbf;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.orders-stat-value {
+  margin-top: 4px;
+  font-size: 24px;
+  font-weight: 700;
+  color: #1e3a6e;
+}
+
+.orders-stat-value.money { color: #1a7a45; }
+
+/* ── Filter pills ── */
+.orders-filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.orders-filter {
+  border: none;
+  background: #dde6f4;
+  color: #6b82a8;
+  padding: 8px 16px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  font-family: inherit;
+  text-transform: capitalize;
+  cursor: pointer;
+  transition: background 0.18s, color 0.18s;
+}
+
+.orders-filter:hover { background: #cfdbee; }
+
+.orders-filter.active {
+  background: #1e3a6e;
+  color: #ffffff;
+}
+
+/* ── Table ── */
+.orders-card {
+  background: #ffffff;
+  border-radius: 18px;
+  box-shadow: 0 2px 16px rgba(100, 140, 200, 0.09);
+  overflow-x: auto;
+}
+
+.orders-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 13.5px;
+}
+
+.orders-table th {
+  text-align: left;
+  padding: 14px 18px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #8a9bbf;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  border-bottom: 1px solid #eef2f8;
+  white-space: nowrap;
+}
+
+.orders-table td {
+  padding: 14px 18px;
+  color: #1e3a6e;
+  border-bottom: 1px solid #f1f5fb;
+  vertical-align: top;
+}
+
+.orders-table tbody tr:last-child td { border-bottom: none; }
+
+.order-id { font-weight: 700; white-space: nowrap; }
+.order-date { color: #6b82a8; white-space: nowrap; }
+.order-total { font-weight: 700; white-space: nowrap; }
+
+.order-items {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.order-qty { font-weight: 600; color: #4a7fd4; }
+.order-color { color: #8a9bbf; }
+
+/* ── Badges + status dropdown ── */
+.pay-badge {
+  display: inline-block;
+  padding: 4px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.pay-badge.cash { background: #fdf0d5; color: #9a6a10; }
+.pay-badge.card { background: #dce8f8; color: #2a4f96; }
+
+.status-select {
+  border: none;
+  border-radius: 999px;
+  padding: 7px 14px;
+  font-size: 12.5px;
+  font-weight: 700;
+  font-family: inherit;
+  text-transform: capitalize;
+  cursor: pointer;
+  outline: none;
+}
+
+.status-select:disabled { cursor: not-allowed; opacity: 0.8; }
+.status-select.pending   { background: #fdf0d5; color: #9a6a10; }
+.status-select.confirmed { background: #dce8f8; color: #2a4f96; }
+.status-select.delivered { background: #d6f0e0; color: #1a7a45; }
+.status-select.cancelled { background: #fde1e3; color: #a1182a; }
+
+.orders-empty {
+  text-align: center;
+  padding: 48px;
+  color: #9aabb8;
+  font-size: 15px;
+  background: #ffffff;
+  border-radius: 18px;
+}
+
+@media (max-width: 768px) {
+  .orders-stats { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
